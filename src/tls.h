@@ -28,6 +28,7 @@
 
 #include "protocol.h"
 
+/*https://stackoverflow.com/questions/2190919/mixing-extern-and-const*/
 extern const protocol_t *const tls_protocol;
 
 #endif

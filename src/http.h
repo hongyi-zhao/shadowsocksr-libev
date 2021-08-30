@@ -29,6 +29,7 @@
 #include <stdio.h>
 #include "protocol.h"
 
+/*https://stackoverflow.com/questions/2190919/mixing-extern-and-const*/
 extern const protocol_t *const http_protocol;
 
 #endif
