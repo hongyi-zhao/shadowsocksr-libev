@@ -26,6 +26,10 @@
 #ifndef PROTOCOL_H
 #define PROTOCOL_H
 
+/*https://groups.google.com/g/comp.unix.shell/c/QZpbj_8IZz8/m/n_RA7gHrBQAJ*/
+/*https://groups.google.com/g/comp.lang.c/c/7qAMmeDUFvY/m/T7ITkWWOBAAJ*/
+/*http://unixwiz.net/techtips/reading-cdecl.html*/
+/*https://cdecl.org/*/
 typedef struct protocol {
     const int default_port;
     int(*const parse_packet)(const char *, size_t, char **);
