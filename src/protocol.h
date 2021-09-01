@@ -26,10 +26,60 @@
 #ifndef PROTOCOL_H
 #define PROTOCOL_H
 
-/*https://groups.google.com/g/comp.unix.shell/c/QZpbj_8IZz8/m/n_RA7gHrBQAJ*/
-/*https://groups.google.com/g/comp.lang.c/c/7qAMmeDUFvY/m/T7ITkWWOBAAJ*/
-/*http://unixwiz.net/techtips/reading-cdecl.html*/
-/*https://cdecl.org/*/
+/*
+https://groups.google.com/g/comp.unix.shell/c/QZpbj_8IZz8/m/n_RA7gHrBQAJ
+https://groups.google.com/g/comp.lang.c/c/7qAMmeDUFvY/m/v24yB3eiBAAJ
+When reading complex declarations, start by finding the leftmost
+identifier and work your way out, remembering the following rules:
+
+T *ap[N]; // ap is an array of pointer to T
+T (*pa)[N]; // pa is a pointer to an array of T
+T *fp(); // fp is a function returning pointer to T
+T (*pf)(); // pf is a pointer to a function returning T
+
+T const *p; // p is a pointer to const T
+const T *p; // same as above
+
+T * const p; // p is a const pointer to T
+
+Apply these rules recursively to any function parameters. Given that,
+this declaration breaks down as
+
+parse_packet -- parse_packet
+(*const parse_packet) -- is a const pointer to
+
+(*const parse_packet)( ) -- function taking
+(*const parse_packet)( ) -- unnamed parameter
+(*const parse_packet)( * ) -- is a pointer to
+(*const parse_packet)(const char * ) -- const char
+(*const parse_packet)(const char *,
+) -- unnamed parameter
+(*const parse_packet)(const char *,
+size_t ) -- is a size_t
+(*const parse_packet)(const char *,
+size_t,
+) -- unnamed parameter
+(*const parse_packet)(const char *,
+size_t,
+* ) -- is a pointer to
+(*const parse_packet)(const char *,
+size_t,
+** ) -- a pointer to
+(*const parse_packet)(const char *,
+size_t,
+char ** ) -- char
+int (*const parse_packet)(const char *,
+size_t,
+char ** ) -- returning int
+
+In plain English, parse_packet is a const pointer to a function taking
+three arguments of type const char *, size_t, and char **, and returning
+an int. 
+
+http://unixwiz.net/techtips/reading-cdecl.html
+https://cdecl.org/
+*/
+
 typedef struct protocol {
     const int default_port;
     int(*const parse_packet)(const char *, size_t, char **);
